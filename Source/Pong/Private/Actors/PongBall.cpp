@@ -48,15 +48,22 @@ void APongBall::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (IsValid(Movement)) Movement->SetInterpolatedComponent(Mesh);
-
 	if (HasAuthority())
 	{
 		Start();
 	}
 	else
 	{
-		if (IsValid(Movement)) Movement->bSimulationEnabled = false;
+		if (IsValid(Movement))
+		{
+			Movement->SetInterpolatedComponent(Mesh);
+			Movement->bSimulationEnabled = false;
+		}
+		if (IsValid(Sphere))
+		{
+			// Don't want to have any collision on the clients
+			Sphere->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+		}
 	}
 }
 

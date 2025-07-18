@@ -6,6 +6,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class UFloatingPawnMovement;
 
 UCLASS(Abstract)
 class PONG_API APongPaddle : public APawn
@@ -14,6 +15,12 @@ class PONG_API APongPaddle : public APawn
 
 public:
 	APongPaddle();
+
+	void Move(float AxisValue);
+
+protected:
+	UFUNCTION(Server, Reliable)
+	void ServerMove(FVector_NetQuantize TargetLocation);
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
@@ -24,4 +31,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
 	TObjectPtr<USpringArmComponent> CameraBoom;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
+	TObjectPtr<UFloatingPawnMovement> Movement;
 };
