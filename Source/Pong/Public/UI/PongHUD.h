@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include "Data/PongMatchState.h"
 #include "PongHUD.generated.h"
 
 class UPongPlayerOverlayWidget;
@@ -25,4 +26,15 @@ protected:
 
 private:
 	void CreatePlayerOverlayWidget();
+	void InitPlayerOverlayWidget();
+	void InitScore();
+
+	UFUNCTION()
+	void OnMatchStateChanged(EPongMatchState NewMatchState);
+
+	UFUNCTION()
+	void OnPlayerScoreChanged(int32 NewPlayerScore);
+
+	UFUNCTION()
+	void OnOpponentScoreChanged(int32 NewOpponentScore);
 };

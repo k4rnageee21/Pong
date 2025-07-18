@@ -22,9 +22,8 @@ void APongGoal::BeginPlay()
 
 void APongGoal::OnGoalAreaOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	APongBall* PongBall = Cast<APongBall>(OtherActor);
-	if (IsValid(PongBall))
+	if (IsValid(OtherActor) && OtherActor->IsA<APongBall>())
 	{
-		PongBall->Restart();
+		OnScored.Broadcast(this);
 	}
 }

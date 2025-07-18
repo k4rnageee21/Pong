@@ -4,6 +4,8 @@
 #include "GameFramework/PlayerStart.h"
 #include "Actors/PongBall.h"
 #include "GameStates/PongGameState.h"
+#include "Actors/PongGoal.h"
+#include "PlayerStates/PongPlayerState.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPongGameMode, Log, All);
 
@@ -39,6 +41,42 @@ void APongGameMode::SetMatchState(EPongMatchState NewState)
 	}
 }
 
+void APongGameMode::OnPlayerSideChosen(APongGoal* SideGoal, AController* Player)
+{
+	if (IsValid(Player) && IsValid(SideGoal))
+	{
+		if (!GoalsControllersSetup.Contains(SideGoal))
+		{
+			GoalsControllersSetup.Add(SideGoal, Player);
+		}
+
+		SideGoal->OnScored.AddDynamic(this, &ThisClass::OnGoalScored);
+	}
+}
+
+void APongGameMode::OnGoalScored(APongGoal* Goal)
+{
+	if (!IsValid(Goal) || !IsValid(PongGameState)) return;
+
+	AController* GoalOwner = *GoalsControllersSetup.Find(Goal);
+	if (IsValid(GoalOwner))
+	{
+		APlayerState* GoalOwnerPS = GoalOwner->GetPlayerState<APlayerState>();
+		APongPlayerState* GoalScorerPlayerState = Cast<APongPlayerState>(PongGameState->GetOpponentPlayerState(GoalOwnerPS));
+	
+		if (IsValid(GoalScorerPlayerState))
+		{
+			const int32 NewScore = GoalScorerPlayerState->GetPlayerScore() + ScoreIncrement;
+			GoalScorerPlayerState->SetPlayerScore(NewScore);
+		}
+	}
+
+	if (IsValid(PongBall))
+	{
+		PongBall->Restart(BallRestartLocation);
+	}
+}
+
 void APongGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
@@ -60,6 +98,7 @@ void APongGameMode::PrepareToStartMatch()
 	if (!IsValid(World)) return;
 
 	SetMatchState(EPongMatchState::WaitingToStart);
+	InitGoals();
 
 	FTimerHandle TH;
 	World->GetTimerManager().SetTimer(TH, this, &ThisClass::StartMatch, StartMatchDelay, false);
@@ -82,8 +121,14 @@ void APongGameMode::FindPongSetup()
 void APongGameMode::StartMatch()
 {
 	SetMatchState(EPongMatchState::InProgress);
-
 	SpawnBall();
+}
+
+void APongGameMode::InitGoals()
+{
+	if (!IsValid(PongGameState)) return;
+
+	
 }
 
 void APongGameMode::SpawnBall()
@@ -101,7 +146,7 @@ void APongGameMode::SpawnBall()
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	
-	PongBall = World->SpawnActor<APongBall>(BallClass, BallSpawnLocation, ZeroRotator, SpawnParams);
+	PongBall = World->SpawnActor<APongBall>(BallClass, BallRestartLocation, ZeroRotator, SpawnParams);
 	if (!IsValid(PongBall))
 	{
 		UE_LOG(LogPongGameMode, Warning, TEXT("Can't spawn a ball object! Can't start the game properly!"));
@@ -126,6 +171,7 @@ AActor* APongGameMode::ChoosePlayerStart_Implementation(AController* Player)
 	}
 
 	ChosenStart = PongPlayerSide.PlayerSpawn;
+	OnPlayerSideChosen(PongPlayerSide.PlayerGoal, Player);
 
 	return ChosenStart;
 }

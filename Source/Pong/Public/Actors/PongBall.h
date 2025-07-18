@@ -17,7 +17,6 @@ public:
 
 	virtual void PostNetReceiveLocationAndRotation() override;
 
-	UFUNCTION(BlueprintCallable)
 	void Restart(FVector StartLocation = FVector::ZeroVector);
 
 protected:

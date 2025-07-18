@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "PongGoal.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnScoredSignature, APongGoal*, Goal);
+
 class UBoxComponent;
 
 UCLASS(Abstract)
@@ -15,6 +17,9 @@ class PONG_API APongGoal : public AActor
 	
 public:	
 	APongGoal();
+
+	UPROPERTY(BlueprintAssignable, Category = Events)
+	FOnScoredSignature OnScored;
 
 protected:
 	virtual void BeginPlay() override;

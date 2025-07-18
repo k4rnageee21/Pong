@@ -27,6 +27,16 @@ void APongGameState::SetMatchState(EPongMatchState InMatchState)
 	}
 }
 
+APlayerState* APongGameState::GetOpponentPlayerState(APlayerState* RequestingPlayerState) const
+{
+	for (APlayerState* PlayerState : PlayerArray)
+	{
+		if (PlayerState != RequestingPlayerState) return PlayerState;
+	}
+
+	return nullptr;
+}
+
 void APongGameState::OnRep_MatchState()
 {
 	OnMatchStateChanged.Broadcast(MatchState);

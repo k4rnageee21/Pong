@@ -7,6 +7,7 @@
 
 class APongSetup;
 class APongBall;
+class APongGoal;
 class APongGameState;
 
 UCLASS(Abstract)
@@ -34,22 +35,31 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void StartMatch();
 
+	void InitGoals();
 	void SpawnBall();
 
 	void SetMatchState(EPongMatchState NewState);
+
+	void OnPlayerSideChosen(APongGoal* SideGoal, AController* Player);
+
+	UFUNCTION()
+	void OnGoalScored(APongGoal* Goal);
 
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Classes)
 	TSubclassOf<APongBall> BallClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Defaults")
-	FVector BallSpawnLocation = FVector::ZeroVector;
+	FVector BallRestartLocation = FVector::ZeroVector;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Defaults")
 	int32 PlayersToStartMatch = 2;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Defaults")
 	float StartMatchDelay = 5.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Defaults")
+	int32 ScoreIncrement = 1;
 
 	UPROPERTY()
 	TObjectPtr<APongSetup> PongSetup;
@@ -59,4 +69,7 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<APongGameState> PongGameState;
+
+	UPROPERTY()
+	TMap<TObjectPtr<APongGoal>, TObjectPtr<AController>> GoalsControllersSetup;
 };

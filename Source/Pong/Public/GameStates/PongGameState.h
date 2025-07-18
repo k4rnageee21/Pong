@@ -25,6 +25,8 @@ public:
 
 	void SetMatchState(EPongMatchState InMatchState);
 
+	APlayerState* GetOpponentPlayerState(APlayerState* RequestingPlayerState) const;
+
 private:
 	UFUNCTION()
 	void OnRep_MatchState();
