@@ -82,7 +82,7 @@ void APongBall::Start()
 	}
 }
 
-void APongBall::Reset(FVector StartLocation)
+void APongBall::Restart(FVector StartLocation)
 {
 	if (HasAuthority())
 	{

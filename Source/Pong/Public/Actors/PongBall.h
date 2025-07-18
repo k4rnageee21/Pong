@@ -18,7 +18,7 @@ public:
 	virtual void PostNetReceiveLocationAndRotation() override;
 
 	UFUNCTION(BlueprintCallable)
-	void Reset(FVector StartLocation = FVector::ZeroVector);
+	void Restart(FVector StartLocation = FVector::ZeroVector);
 
 protected:
 	virtual void BeginPlay() override;
@@ -35,15 +35,15 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = Components)
 	TObjectPtr<UProjectileMovementComponent> Movement;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Runtime")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Defaults")
 	float StartXMinVelocity = 2000.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Runtime")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Defaults")
 	float StartXMaxVelocity = 3000.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Runtime")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Defaults")
 	float StartYMinVelocity = 250.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Runtime")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Config | Defaults")
 	float StartYMaxVelocity = 500.f;
 };

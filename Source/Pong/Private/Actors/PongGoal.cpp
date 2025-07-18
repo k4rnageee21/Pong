@@ -25,6 +25,6 @@ void APongGoal::OnGoalAreaOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 	APongBall* PongBall = Cast<APongBall>(OtherActor);
 	if (IsValid(PongBall))
 	{
-		PongBall->Reset();
+		PongBall->Restart();
 	}
 }
