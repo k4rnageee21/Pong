@@ -7,6 +7,11 @@
 
 class UPongPlayerOverlayWidget;
 
+/**
+ * APongHUD
+ * Acts like a controller in MVC for the gameplay logic (model) and widgets (view). Also is responsible
+ * for widgets creation.
+ */
 UCLASS(Abstract)
 class PONG_API APongHUD : public AHUD
 {

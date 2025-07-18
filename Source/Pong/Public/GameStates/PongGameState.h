@@ -25,6 +25,7 @@ public:
 
 	void SetMatchState(EPongMatchState InMatchState);
 
+	/** Returns the player state of an opponent player of the requesting player. */
 	APlayerState* GetOpponentPlayerState(APlayerState* RequestingPlayerState) const;
 
 private:
